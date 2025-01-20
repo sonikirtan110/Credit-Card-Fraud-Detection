@@ -88,8 +88,7 @@ Name: Kirtan Soni
 
 Email: sonikirtan2004@gmail.com
 
-LinkedIn: Kirtan Soni
-
+LinkedIn:https://www.linkedin.com/in/kirtansoni02
 
 
 ---
