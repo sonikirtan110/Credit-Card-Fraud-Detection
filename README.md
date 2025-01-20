@@ -1,5 +1,3 @@
-# Credit-Card-Fraud-Detection-
-"A project to detect credit card fraud using machine learning and Power BI."
 # Credit Card Fraud Detection  
 This project aims to detect fraudulent credit card transactions using machine learning and visualize insights with Power BI.  
 
