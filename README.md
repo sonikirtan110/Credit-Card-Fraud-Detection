@@ -24,7 +24,7 @@ This project leverages **Machine Learning** for real-time fraud detection and **
 ## 📄 Dataset  
 - **Source**: [Kaggle - Fraud Detection Dataset](https://www.kaggle.com/datasets/kartik2112/fraud-detection/data)  
 - **Details**:  
-  - 🛒 1,048,574 transactions from 1,000 customers (2019–2020).  
+  - 🛒 12,96,675 transactions from 1,000 customers (2019–2020).  
   - 🎯 Transactions are labeled as legitimate or fraudulent.  
   - 📍 Features include transaction amount, location, and customer demographics.  
 
