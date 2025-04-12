@@ -1,5 +1,3 @@
----
-
 # 💳 Credit Card Fraud Detection
 
 🔍 **About the Project**  
@@ -20,72 +18,66 @@ This project leverages **Machine Learning** for real-time fraud detection and **
 ## 🗂️ File Structure
 
 ```
-📁 credit-card-fraud-detection/
+credit-card-fraud-detection/
 │
-├── 📂 images
+├── images
 │   ├── 1.png                     # UI homepage
 │   ├── 2.png                     # UI about page
+│   ├── index.png
 │   ├── transaction_overview.png
 │   ├── demographic_insights.png
 │   ├── geographic_analysis.png
 │   ├── merchant_category.png
-│   ├── temporal_analysis.png
+│   └── temporal_analysis.png
 │
-├── 📂 models
+├── models
 │   ├── best_fraud_detection_model.pkl
 │   ├── best_fraud_detection_modell.pkl
 │   └── best_fraud_detection_pipeline1.1.pkl.bz2
 │
-├── 📂 notebooks
+├── notebooks
 │   ├── Test.ipynb
 │   ├── TryFinal.ipynb
 │   └── TryFinal - Copy.ipynb
 │
-│
-├── 📂 templates
+├── templates
 │   └── index.html
 │
 ├── app.py
 ├── LICENSE
-├── requirements.txt
 ├── Projectppt.pptx
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
 ## 📊 Live Dashboard
 
-🔗 **NovyPro**: [Power BI NovyPro Dashboard](https://www.novypro.com/project/credit-card-fraud-detection-dashboard-kirtan)  
-🔗 **Power BI Live**: [Live Power BI Dashboard](https://app.powerbi.com/groups/me/reports/fraud-dashboard-id)  
-🌐 **Render UI**: [Live Web App on Render](https://fraud-ui-app.onrender.com)
+- 🔗 **NovyPro**: [Power BI NovyPro Dashboard](https://project.novypro.com/oSlNml)  
+- 🔗 **Power BI Live**: [Live Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiZjhkMTVmMzUtNDJkOC00OGVlLTkzMDYtYzFiYWM4OWExMzI2IiwidCI6ImRhYTU5MmNhLWRlN2ItNGM1NC04ODM2LTkxYTY2OTBmZTE5NyJ9&pageName=227861ced3fd2f726a2c)  
+- 🌐 **Render UI**: [Live Web App on Render](https://credit-card-fraud-detection-gnkn.onrender.com)
 
 ---
 
 ## 🗂️ Workflow
 
 1. 🧹 **Data Preprocessing**  
-   - Handled missing values  
-   - Standardized and encoded features  
+   - Cleaning and preparing the dataset (handling missing values, standardization, encoding).
 
 2. 🔍 **Exploratory Data Analysis (EDA)**  
-   - Transaction trends  
-   - High-risk locations and categories  
+   - Analyzing transaction trends, locations, and categories.
 
 3. 🤖 **Model Training**  
-   - Logistic Regression  
-   - Decision Tree  
-   - Random Forest (Best Performing)  
-   - Gradient Boosting  
-   - Model evaluated on F1 Score, Precision, Recall  
+   - Implementing and evaluating various ML algorithms such as Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, etc.  
+   - Model selection is based on key metrics like F1 Score, Precision, and Recall.
 
 4. 🌐 **Web Application**  
-   - Built with FastAPI + HTML/CSS  
-   - Rendered predictions dynamically via API  
+   - Built using Flask (with HTML/CSS for UI).  
+   - The model pipeline is deployed as a web service for real-time predictions.
 
 5. 📊 **Visualization**  
-   - Power BI dashboard with dynamic filtering  
-   - Fraud vs. Legit analysis per platform and category  
+   - Power BI dashboards for interactive analysis and reporting of fraudulent versus legitimate transactions.
 
 ---
 
@@ -94,8 +86,8 @@ This project leverages **Machine Learning** for real-time fraud detection and **
 - **Source**: [Kaggle - Fraud Detection Dataset](https://www.kaggle.com/datasets/kartik2112/fraud-detection/data)  
 - **Details**:  
   - 1,296,675 transactions from 1,000 customers (2019–2020)  
-  - Labeled as fraudulent or legitimate  
-  - Features: amount, location, category, time, etc.  
+  - Transactions are labeled as fraudulent or legitimate  
+  - Features include transaction amount, location, category, timestamp, etc.
 
 ---
 
@@ -113,43 +105,43 @@ pip install -r requirements.txt
 ```
 
 ### 3. Run the ML Model
-Use Jupyter Notebook:
-```bash
-jupyter notebook
-```
-or run the pipeline from script:
-```bash
-python app.py
-```
+- **Jupyter Notebook**: Open and run the provided notebooks to train/test the model.
+- **Script**: You can also run the web service with:
+  ```bash
+  python app.py
+  ```
 
 ### 4. Explore the Dashboard  
-Open `.pbix` file locally or explore the hosted version on NovyPro or Power BI Live.
+- Open the provided `.pbix` file in Power BI, or  
+- View the hosted dashboards using the links above.
 
 ---
 
 ## 🖼️ Project Visualizations
 
-### 🏠 UI Preview:
-| Home | About |
-|------|-------------|
+### UI Preview
+| Home Page | About Page |
+|-----------|------------|
 | ![1.png](images/1.png) | ![2.png](images/2.png) |
 
-### 📊 Power BI Visuals:
+### Power BI Visuals
+- **Home Page**:  
+  ![Home Page](images/index.png)
 
-#### Transaction Overview:
-![Transaction Overview](images/transaction_overview.png)
+- **Transaction Overview**:  
+  ![Transaction Overview](images/transaction_overview.png)
 
-#### Demographic Insights:
-![Demographic Insights](images/demographic_insights.png)
+- **Demographic Insights**:  
+  ![Demographic Insights](images/demographic_insights.png)
 
-#### Geographic Analysis:
-![Geographic Analysis](images/geographic_analysis.png)
+- **Geographic Analysis**:  
+  ![Geographic Analysis](images/geographic_analysis.png)
 
-#### Merchant & Category Analysis:
-![Merchant Category Analysis](images/merchant_category.png)
+- **Merchant & Category Analysis**:  
+  ![Merchant Category Analysis](images/merchant_category.png)
 
-#### Temporal Analysis:
-![Temporal Analysis](images/temporal_analysis.png)
+- **Temporal Analysis**:  
+  ![Temporal Analysis](images/temporal_analysis.png)
 
 ---
 
@@ -167,27 +159,26 @@ Open `.pbix` file locally or explore the hosted version on NovyPro or Power BI L
 
 ## 📜 License
 
-Licensed under the Apache License.  
+This project is licensed under the Apache License.
 
 ---
 
 ## 🤝 Contributions
 
-- Suggestions and PRs welcome!
-- Open issues for bugs or feature requests.
+- Contributions, suggestions, and PRs are welcome!
+- Please open issues for bugs or feature requests.
 
 ---
 
 ## 📬 Contact
 
-**👤 Kirtan Soni**  
-📧 Email: [sonikirtan2004@gmail.com](mailto:sonikirtan2004@gmail.com)  
-🔗 LinkedIn: [linkedin.com/in/kirtansoni02](https://www.linkedin.com/in/kirtansoni02)
+**Kirtan Soni**  
+- Email: [sonikirtan2004@gmail.com](mailto:sonikirtan2004@gmail.com)  
+- LinkedIn: [linkedin.com/in/kirtansoni02](https://www.linkedin.com/in/kirtansoni02)
 
 ---
 
-⭐ **If you liked this project, give it a star on GitHub!**
+⭐ **If you like this project, please give it a star on GitHub!**
+```
 
 ---
-
-Let me know if you'd like the actual `.md` file download or help deploying the dashboard/UI links.
