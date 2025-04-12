@@ -22,13 +22,9 @@ This project leverages **Machine Learning** for real-time fraud detection and **
 ```
 📁 credit-card-fraud-detection/
 │
-├── 📂 data
-│   ├── fraudTest.csv
-│   └── fraudTrain.csv
-│
 ├── 📂 images
 │   ├── 1.png                     # UI homepage
-│   ├── 2.png                     # UI transactions page
+│   ├── 2.png                     # UI about page
 │   ├── transaction_overview.png
 │   ├── demographic_insights.png
 │   ├── geographic_analysis.png
@@ -134,7 +130,7 @@ Open `.pbix` file locally or explore the hosted version on NovyPro or Power BI L
 ## 🖼️ Project Visualizations
 
 ### 🏠 UI Preview:
-| Home | Transaction |
+| Home | About |
 |------|-------------|
 | ![1.png](images/1.png) | ![2.png](images/2.png) |
 
@@ -171,8 +167,7 @@ Open `.pbix` file locally or explore the hosted version on NovyPro or Power BI L
 
 ## 📜 License
 
-Licensed under the MIT License.  
-Use, modify, and share freely.
+Licensed under the Apache License.  
 
 ---
 
