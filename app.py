@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # 1. Load the trained pipeline
 
-with bz2.open("best_fraud_detection_pipeline1.1.pkl.bz2", "rb") as f:
+with bz2.open("models/best_fraud_detection_pipeline1.1.pkl.bz2", "rb") as f:
     pipeline = joblib.load(f)
 # 2. Category options (for dropdown in index.html)
 categories = [
