@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection</title>
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            /* Light Theme (default) */
+            --background: #f5f7fa;
+            --foreground: #1e293b;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --input-bg: #ffffff;
+            --input-border: #cbd5e1;
+            --input-focus-border: #3b82f6;
+            --input-focus-shadow: rgba(59, 130, 246, 0.2);
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-foreground: #ffffff;
+            --secondary: #f1f5f9;
+            --secondary-hover: #e2e8f0;
+            --secondary-foreground: #1e293b;
+            --muted: #94a3b8;
+            --muted-foreground: #64748b;
+            --success: #22c55e;
+            --success-bg: #f0fdf4;
+            --success-border: #22c55e;
+            --warning: #f59e0b;
+            --warning-bg: #fffbeb;
+            --warning-border: #f59e0b;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --danger-border: #ef4444;
+            --border-radius: 0.5rem;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --foreground: #f8fafc;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --input-bg: #1e293b;
+            --input-border: #475569;
+            --input-focus-border: #60a5fa;
+            --input-focus-shadow: rgba(96, 165, 250, 0.2);
+            --primary: #60a5fa;
+            --primary-hover: #3b82f6;
+            --primary-foreground: #0f172a;
+            --secondary: #334155;
+            --secondary-hover: #475569;
+            --secondary-foreground: #f8fafc;
+            --muted: #64748b;
+            --muted-foreground: #94a3b8;
+            --success: #22c55e;
+            --success-bg: rgba(34, 197, 94, 0.1);
+            --success-border: #22c55e;
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --warning-border: #f59e0b;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --danger-border: #ef4444;
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--foreground);
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        /* Layout */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .grid-cols-3 {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .space-y-2>*+* {
+            margin-top: 0.5rem;
+        }
+
+        .space-y-4>*+* {
+            margin-top: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card-dashed {
+            border-style: dashed;
+            border-width: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            min-height: 200px;
+        }
+
+        .card-success {
+            border-color: var(--success-border);
+            border-width: 2px;
+            background-color: var(--success-bg);
+        }
+
+        .card-warning {
+            border-color: var(--warning-border);
+            border-width: 2px;
+            background-color: var(--warning-bg);
+        }
+
+        .card-danger {
+            border-color: var(--danger-border);
+            border-width: 2px;
+            background-color: var(--danger-bg);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            color: var(--foreground);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background-color: var(--input-bg);
+            color: var(--foreground);
+            font-size: 1rem;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .input-icon-left {
+            padding-left: 2.5rem;
+        }
+
+        .input-action {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        .btn-icon-sm {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 1.5rem;
+        }
+
+        .tabs-list {
+            display: flex;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background-color: var(--card-border);
+            margin: 1.5rem 0;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 0.5rem;
+            background-color: var(--secondary);
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-success {
+            background-color: var(--success);
+        }
+
+        .progress-warning {
+            background-color: var(--warning);
+        }
+
+        .progress-danger {
+            background-color: var(--danger);
+        }
+
+        /* Icons */
+        .icon {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .icon-lg {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .icon-xl {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary);
+            width: 1.5rem;
+            height: 1.5rem;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none;
+        }
+
+        .opacity-20 {
+            opacity: 0.2;
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+        .text-danger {
+            color: var(--danger);
+        }
+
+        /* Responsive Grid */
+        .form-row {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 640px) {
+            .form-row-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Section Styles */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-section {
+            margin-top: 1.5rem;
+        }
+
+        .location-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Risk Indicator */
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.75rem 0;
+        }
+
+        .risk-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+        }
+
+        .risk-dot-success {
+            background-color: var(--success);
+        }
+
+        .risk-dot-warning {
+            background-color: var(--warning);
+        }
+
+        .risk-dot-danger {
+            background-color: var(--danger);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="btn btn-icon theme-toggle" aria-label="Toggle theme">
+        <svg id="lightIcon" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="darkIcon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <h1>Credit Card Fraud Detection</h1>
+            <p class="text-center text-muted mb-4">Enter transaction details to analyze fraud risk</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tabs-list">
+                <div class="tab active" data-tab="form">Transaction Details</div>
+                <div class="tab" data-tab="about">About This Tool</div>
+            </div>
+
+            <!-- Transaction Form Tab -->
+            <div id="formTab" class="tab-content active">
+                <div class="grid grid-cols-3">
+                    <!-- Form Card -->
+                    <div class="card">
+                        <form id="fraudForm">
+                            <!-- Transaction Details Section -->
+                            <div class="mb-4">
+                                <div class="section-title">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                                    </svg>
+                                    <h2>Transaction Details</h2>
+                                </div>
+
+                                <div class="form-row form-row-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="amt">Transaction Amount ($)</label>
+                                        <div class="input-group">
+                                            <svg class="icon input-icon" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24">
+                                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                            </svg>
+                                            <input type="number" id="amt" name="amt" class="form-input input-icon-left"
+                                                step="0.01" min="0" placeholder="Enter amount" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="category">Transaction Category</label>
+                                        <select id="category" name="category" class="form-select" required>
+                                            <option value="entertainment">Entertainment</option>
+                                            <option value="food_dining">Food & Dining</option>
+                                            <option value="gas_transport">Gas & Transport</option>
+                                            <option value="grocery_net">Grocery (Online)</option>
+                                            <option value="grocery_pos">Grocery (In-store)</option>
+                                            <option value="health_fitness">Health & Fitness</option>
+                                            <option value="home">Home</option>
+                                            <option value="kids_pets">Kids & Pets</option>
+                                            <option value="misc_net">Miscellaneous (Online)</option>
+                                            <option value="misc_pos">Miscellaneous (In-store)</option>
+                                            <option value="personal_care">Personal Care</option>
+                                            <option value="shopping_net" selected>Shopping (Online)</option>
+                                            <option value="shopping_pos">Shopping (In-store)</option>
+                                            <option value="travel">Travel</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="city_pop">City Population</label>
+                                        <div class="input-group">
+                                            <svg class="icon input-icon" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24">
+                                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="9" cy="7" r="4"></circle>
+                                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            </svg>
+                                            <input type="number" id="city_pop" name="city_pop"
+                                                class="form-input input-icon-left" min="0"
+                                                placeholder="Enter population" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="unix_time">Transaction Time (Unix)</label>
+                                        <div class="input-group">
+                                            <input type="number" id="unix_time" name="unix_time" class="form-input"
+                                                min="0" placeholder="Unix timestamp" required>
+                                            <div class="input-action">
+                                                <button type="button" id="nowButton"
+                                                    class="btn btn-secondary btn-sm">Now</button>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-muted mt-2">Current: <span id="currentUnixTime"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="separator"></div>
+
+                            <!-- Location Information Section -->
+                            <div class="location-section">
+                                <div class="section-title">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                        </path>
+                                    </svg>
+                                    <h2>Location Information</h2>
+                                </div>
+
+                                <div class="form-row form-row-2">
+                                    <div>
+                                        <div class="location-title">
+                                            <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                <circle cx="12" cy="10" r="3"></circle>
+                                            </svg>
+                                            Customer Location
+                                        </div>
+                                        <div class="form-row form-row-2">
+                                            <div class="form-group">
+                                                <label class="form-label" for="lat">Latitude</label>
+                                                <input type="number" id="lat" name="lat" class="form-input"
+                                                    step="0.000001" min="-90" max="90" placeholder="-90 to 90" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="long">Longitude</label>
+                                                <input type="number" id="long" name="long" class="form-input"
+                                                    step="0.000001" min="-180" max="180" placeholder="-180 to 180"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="location-title">
+                                            <svg class="icon icon-sm" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                <circle cx="12" cy="10" r="3"></circle>
+                                            </svg>
+                                            Merchant Location
+                                        </div>
+                                        <div class="form-row form-row-2">
+                                            <div class="form-group">
+                                                <label class="form-label" for="merch_lat">Latitude</label>
+                                                <input type="number" id="merch_lat" name="merch_lat" class="form-input"
+                                                    step="0.000001" min="-90" max="90" placeholder="-90 to 90" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="merch_long">Longitude</label>
+                                                <input type="number" id="merch_long" name="merch_long"
+                                                    class="form-input" step="0.000001" min="-180" max="180"
+                                                    placeholder="-180 to 180" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="submitButton" class="btn btn-primary w-full mt-4">
+                                Check Fraud Risk
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Results Card -->
+                    <div id="resultContainer">
+                        <!-- Empty State (Default) -->
+                        <div id="emptyState" class="card card-dashed">
+                            <svg class="icon icon-xl opacity-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <h3 class="mt-2">No Analysis Yet</h3>
+                            <p class="text-muted">Fill out the form and submit to see fraud detection results</p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="loadingState" class="card card-dashed hidden">
+                            <div class="spinner"></div>
+                            <h3 class="mt-2">Analyzing Transaction...</h3>
+                            <p class="text-muted">Please wait while we process your request</p>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="errorState" class="card card-danger hidden">
+                            <div class="flex items-center gap-4">
+                                <svg class="icon icon-lg text-danger" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <div>
+                                    <h3 class="font-semibold">Error</h3>
+                                    <p id="errorMessage" class="text-muted">Failed to process request</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result State -->
+                        <div id="resultState" class="card hidden">
+                            <div class="flex flex-col items-center text-center mb-4">
+                                <div id="resultIcon"></div>
+                                <h3 id="resultTitle" class="font-semibold text-xl mt-2"></h3>
+                                <div id="progressContainer" class="progress-container mt-3">
+                                    <div id="progressBar" class="progress-bar"></div>
+                                </div>
+                                <p class="text-sm mt-1">
+                                    Risk Score: <span id="riskScore" class="font-semibold"></span>
+                                </p>
+                            </div>
+
+                            <div class="separator"></div>
+
+                            <div>
+                                <h4 class="font-medium mb-2">Recommendation:</h4>
+                                <p id="recommendation" class="text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div id="aboutTab" class="tab-content">
+                <div class="card">
+                    <h2 class="text-2xl font-bold mb-4">About This Fraud Detection Tool</h2>
+                    <p class="mb-4">
+                        This application uses machine learning to analyze credit card transactions and detect potential
+                        fraud.
+                        The model evaluates various factors including transaction amount, location, merchant details,
+                        and more.
+                    </p>
+
+                    <h3 class="text-lg font-semibold mt-6 mb-2">How It Works</h3>
+                    <ol class="space-y-2 mb-4" style="padding-left: 1.5rem;">
+                        <li>Enter all transaction details in the form</li>
+                        <li>Submit the form to analyze the transaction</li>
+                        <li>Review the risk assessment and recommendation</li>
+                        <li>Take appropriate action based on the results</li>
+                    </ol>
+
+                    <h3 class="text-lg font-semibold mt-6 mb-2">Risk Levels</h3>
+                    <div class="space-y-3">
+                        <div class="risk-indicator">
+                            <div class="risk-dot risk-dot-danger"></div>
+                            <span class="font-medium">High Risk (80-100%)</span>
+                            <span class="text-sm text-muted ml-2">Immediate verification recommended</span>
+                        </div>
+                        <div class="risk-indicator">
+                            <div class="risk-dot risk-dot-warning"></div>
+                            <span class="font-medium">Medium Risk (50-80%)</span>
+                            <span class="text-sm text-muted ml-2">Additional authentication suggested</span>
+                        </div>
+                        <div class="risk-indicator">
+                            <div class="risk-dot risk-dot-success"></div>
+                            <span class="font-medium">Low Risk (0-50%)</span>
+                            <span class="text-sm text-muted ml-2">Transaction likely legitimate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const fraudForm = document.getElementById('fraudForm');
+        const nowButton = document.getElementById('nowButton');
+        const currentUnixTimeEl = document.getElementById('currentUnixTime');
+        const unixTimeInput = document.getElementById('unix_time');
+        const submitButton = document.getElementById('submitButton');
+
+        // Result States
+        const resultContainer = document.getElementById('resultContainer');
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const resultState = document.getElementById('resultState');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Result Elements
+        const resultIcon = document.getElementById('resultIcon');
+        const resultTitle = document.getElementById('resultTitle');
+        const progressBar = document.getElementById('progressBar');
+        const riskScore = document.getElementById('riskScore');
+        const recommendation = document.getElementById('recommendation');
+
+        // Tabs
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Theme Management
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize theme based on localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
+            } else {
+                setTheme('light');
+            }
+        }
+
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // Unix Time Management
+        function updateCurrentUnixTime() {
+            const currentTime = Math.floor(Date.now() / 1000);
+            currentUnixTimeEl.textContent = currentTime;
+            return currentTime;
+        }
+
+        // Set current Unix time
+        nowButton.addEventListener('click', () => {
+            unixTimeInput.value = updateCurrentUnixTime();
+        });
+
+        // Update Unix time every second
+        setInterval(updateCurrentUnixTime, 1000);
+
+        // Tab Management
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}Tab`).classList.add('active');
+            });
+        });
+
+        // Form Submission
+        fraudForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Show loading state
+            emptyState.classList.add('hidden');
+            errorState.classList.add('hidden');
+            resultState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<div class="spinner"></div> Analyzing...';
+
+            // Collect form data
+            const formData = new FormData(fraudForm);
+
+            try {
+                // Send data to Flask backend
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+
+                // Parse the JSON response
+                const data = await response.json();
+
+                // Update result state based on API response
+                updateResultState(data);
+
+                // Hide loading state, show result
+                loadingState.classList.add('hidden');
+                resultState.classList.remove('hidden');
+            } catch (error) {
+                // Show error state
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorMessage.textContent = error.message || 'Failed to process request';
+            } finally {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Check Fraud Risk';
+            }
+        });
+
+        // Update result state based on prediction from API
+        function updateResultState(result) {
+            // Set result title - directly use the prediction from API
+            resultTitle.textContent = result.prediction;
+
+            // Set risk score - format the probability as percentage
+            riskScore.textContent = `${(result.probability * 100).toFixed(1)}%`;
+
+            // Set recommendation - directly use from API
+            recommendation.textContent = result.recommendation;
+
+            // Set progress bar width based on probability
+            progressBar.style.width = `${result.probability * 100}%`;
+
+            // Set result card and progress bar color based on risk level
+            // Using the same thresholds as in the Flask backend
+            if (result.probability > 0.8) {
+                resultState.className = 'card card-danger';
+                progressBar.className = 'progress-bar progress-danger';
+                resultIcon.innerHTML = `
+                    <svg class="icon icon-lg text-danger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                `;
+            } else if (result.probability > 0.5) {
+                resultState.className = 'card card-warning';
+                progressBar.className = 'progress-bar progress-warning';
+                resultIcon.innerHTML = `
+                    <svg class="icon icon-lg text-warning" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                `;
+            } else {
+                resultState.className = 'card card-success';
+                progressBar.className = 'progress-bar progress-success';
+                resultIcon.innerHTML = `
+                    <svg class="icon icon-lg text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                `;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            updateCurrentUnixTime();
+            unixTimeInput.value = Math.floor(Date.now() / 1000);
+        });
+    </script>
+</body>
+
+</html>
