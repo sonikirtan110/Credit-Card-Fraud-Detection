@@ -180,5 +180,3 @@ This project is licensed under the Apache License.
 
 ⭐ **If you like this project, please give it a star on GitHub!**
 ```
-
----
