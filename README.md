@@ -38,7 +38,8 @@ credit-card-fraud-detection/
 ├── notebooks
 │   ├── Test.ipynb
 │   ├── TryFinal.ipynb
-│   └── TryFinal - Copy.ipynb
+│   ├── TryFinal - Copy.ipynb
+│   └── TryFinalTunning.ipynb
 │
 ├── templates
 │   └── index.html
