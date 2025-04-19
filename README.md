@@ -1,100 +1,69 @@
 # 💳 Credit Card Fraud Detection
 
 🔍 **About the Project**  
-This project leverages **Machine Learning** for real-time fraud detection and **Power BI** for dynamic visualizations. It aims to help financial institutions reduce losses and enhance trust by quickly identifying fraudulent transactions.
+This project is a full-fledged machine learning pipeline designed for the real-time detection of credit card frauds. It integrates multiple components including machine learning models, REST APIs, local database storage, and data visualization tools such as Power BI. The goal is to enable fast, accurate, and interpretable fraud detection that can be deployed in financial systems.
+
+This project includes:
+- A robust Flask API for transaction classification
+- Integration with MySQL to store prediction logs
+- Power BI dashboards that visualize fraud trends in real-time (locally)
+- A user-friendly UI hosted on Render for manual transaction input
+- Fully tuned ML models using GridSearchCV for optimal accuracy
 
 ---
 
 ## 🚀 Features
 
-- 🔗 Real-time fraud detection with ML models  
-- 📊 Interactive Power BI dashboards for fraud analytics  
-- 🧠 Pretrained ML model with pipeline and hyperparameter tuning  
-- 🌐 Web UI hosted with **Render** for user interaction  
-- 📂 Organized project structure for reproducibility
+- 🔗 Real-time fraud detection with multiple machine learning models
+- 🧠 Optimized ML models using GridSearchCV for parameter tuning
+- 💾 Local MySQL database to store incoming transaction predictions
+- 📊 Visual analytics using Power BI connected directly to MySQL
+- 🌐 Web-based user interface (HTML/CSS + Flask) for easy data entry
+- 📮 RESTful API tested with Postman
+- 📁 Modular project layout for easy understanding and expansion
 
 ---
 
-## 🗂️ File Structure
+## 📁 Project Structure
 
-```
-credit-card-fraud-detection/
-│
-├── images
-│   ├── 1.png                     # UI homepage
-│   ├── 2.png                     # UI about page
-│   ├── index.png
-│   ├── transaction_overview.png
-│   ├── demographic_insights.png
-│   ├── geographic_analysis.png
-│   ├── merchant_category.png
-│   └── temporal_analysis.png
-│
-├── models
+```credit-card-fraud-detection/
+├── app.py                 # Main Flask web app serving the UI and predictions
+├── appsql.py              # Alternate Flask app using MySQL to store results
+├── config.py              # Configuration file containing MySQL credentials
+├── sql/                   # SQL scripts for setting up the database
+│   ├── create_table.sql   # SQL command to create fraud_logs table
+│   └── sample_data.sql    # Sample insert statements to test the table
+├── models/                # Serialized models after training
 │   ├── best_fraud_detection_model.pkl
-│   ├── best_fraud_detection_modell.pkl
 │   └── best_fraud_detection_pipeline1.1.pkl.bz2
-│
-├── notebooks
-│   ├── Test.ipynb
-│   ├── TryFinal.ipynb
-│   ├── TryFinal - Copy.ipynb
-│   └── TryFinalTunning.ipynb
-│
-├── templates
-│   └── index.html
-│
-├── app.py
-├── LICENSE
-├── Projectppt.pptx
-├── README.md
-└── requirements.txt
+├── notebooks/             # Jupyter Notebooks used during model building
+│   ├── TryFinal.ipynb     # Full training/testing pipeline
+│   └── TryFinalTunning.ipynb # GridSearchCV and tuning
+├── templates/             # HTML files for the Flask UI
+│   └── index.html         # Homepage for data entry
+├── images/                # Project screenshots
+│   ├── 1.png                          # Home page screenshot
+│   ├── 2.png                          # About page screenshot
+│   ├── flow_diagram.png              # System architecture flow
+│   ├── postman_test.png              # Postman test example
+│   ├── mysql_connection.png          # MySQL config in Power BI
+│   ├── powerbi_mysql.png             # Power BI table preview
+│   ├── transaction_overview.png      # Dashboard 1
+│   ├── demographic_insights.png      # Dashboard 2
+│   ├── geographic_analysis.png       # Dashboard 3
+│   ├── merchant_category.png         # Dashboard 4
+│   └── temporal_analysis.png         # Dashboard 5
+├── requirements.txt       # Python libraries used
+├── Projectppt.pptx        # Final presentation slides
+└── README.md              # Project documentation
+
 ```
 
 ---
 
-## 📊 Live Dashboard
+## 🔧 Setup & Installation
 
-- 🔗 **NovyPro**: [Power BI NovyPro Dashboard](https://project.novypro.com/oSlNml)  
-- 🔗 **Power BI Live**: [Live Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiZjhkMTVmMzUtNDJkOC00OGVlLTkzMDYtYzFiYWM4OWExMzI2IiwidCI6ImRhYTU5MmNhLWRlN2ItNGM1NC04ODM2LTkxYTY2OTBmZTE5NyJ9&pageName=227861ced3fd2f726a2c)  
-- 🌐 **Render UI**: [Live Web App on Render](https://credit-card-fraud-detection-gnkn.onrender.com)
-
----
-
-## 🗂️ Workflow
-
-1. 🧹 **Data Preprocessing**  
-   - Cleaning and preparing the dataset (handling missing values, standardization, encoding).
-
-2. 🔍 **Exploratory Data Analysis (EDA)**  
-   - Analyzing transaction trends, locations, and categories.
-
-3. 🤖 **Model Training**  
-   - Implementing and evaluating various ML algorithms such as Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, etc.  
-   - Model selection is based on key metrics like F1 Score, Precision, and Recall.
-
-4. 🌐 **Web Application**  
-   - Built using Flask (with HTML/CSS for UI).  
-   - The model pipeline is deployed as a web service for real-time predictions.
-
-5. 📊 **Visualization**  
-   - Power BI dashboards for interactive analysis and reporting of fraudulent versus legitimate transactions.
-
----
-
-## 📄 Dataset
-
-- **Source**: [Kaggle - Fraud Detection Dataset](https://www.kaggle.com/datasets/kartik2112/fraud-detection/data)  
-- **Details**:  
-  - 1,296,675 transactions from 1,000 customers (2019–2020)  
-  - Transactions are labeled as fraudulent or legitimate  
-  - Features include transaction amount, location, category, timestamp, etc.
-
----
-
-## 💻 How to Use
-
-### 1. Clone the Repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/sonikirtan110/credit-card-fraud-detection.git
 cd credit-card-fraud-detection
@@ -105,48 +74,115 @@ cd credit-card-fraud-detection
 pip install -r requirements.txt
 ```
 
-### 3. Run the ML Model
-- **Jupyter Notebook**: Open and run the provided notebooks to train/test the model.
-- **Script**: You can also run the web service with:
-  ```bash
-  python app.py
-  ```
+### 3. Configure MySQL
+Update `config.py` as shown:
+```python
+MYSQL_HOST = 'localhost'
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = 'your_password'
+MYSQL_DB = 'fraud_detection'
+```
 
-### 4. Explore the Dashboard  
-- Open the provided `.pbix` file in Power BI, or  
-- View the hosted dashboards using the links above.
+### 4. Initialize Database
+Run the following commands:
+```bash
+mysql -u root -p < sql/create_table.sql
+mysql -u root -p < sql/sample_data.sql
+```
 
----
-
-## 🖼️ Project Visualizations
-
-### UI Preview
-| Home Page | About Page |
-|-----------|------------|
-| ![1.png](images/1.png) | ![2.png](images/2.png) |
-
-### Power BI Visuals
-- **Home Page**:  
-  ![Home Page](images/index.png)
-
-- **Transaction Overview**:  
-  ![Transaction Overview](images/transaction_overview.png)
-
-- **Demographic Insights**:  
-  ![Demographic Insights](images/demographic_insights.png)
-
-- **Geographic Analysis**:  
-  ![Geographic Analysis](images/geographic_analysis.png)
-
-- **Merchant & Category Analysis**:  
-  ![Merchant Category Analysis](images/merchant_category.png)
-
-- **Temporal Analysis**:  
-  ![Temporal Analysis](images/temporal_analysis.png)
+### 5. Run the Flask App
+```bash
+python app.py
+```
+Visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 📈 Best Model Performance (Random Forest)
+## 📊 Dashboards (Local Power BI)
+Power BI is used **locally** to visualize fraud data from MySQL.
+
+Steps:
+1. Open Power BI Desktop → "Get Data" → "MySQL"
+2. Enter your MySQL credentials
+3. Select the `fraud_logs` table
+4. Build visuals such as:
+   - Count of fraud vs non-fraud transactions
+   - Demographic-based filtering
+   - Fraud trends by date/time
+   - Merchant category fraud reports
+
+---
+
+## 🧪 API Testing
+
+Use **Postman** to send test requests:
+```json
+POST http://127.0.0.1:5000/predict
+{
+  "amount": 450.50,
+  "time": 12000,
+  "category": "electronics"
+}
+```
+
+To confirm data is being logged, run:
+```sql
+SELECT * FROM fraud_logs;
+```
+
+You’ll see real-time logs of each prediction made by the model.
+
+---
+
+## 🖼️ Visuals
+
+**📊 System Flow Diagram**  
+Shows data flow from user to model to MySQL to Power BI.  
+![Flow Diagram](images/flow_diagram.png)
+
+**📮 Postman API Test**  
+Sample request and successful JSON response.  
+![Postman](images/postman_test.png)
+
+**🔌 MySQL - Connection Setup (Power BI)**  
+How the database is linked with Power BI.  
+![MySQL Connection](images/mysql_connection.png)
+
+**📈 Power BI - MySQL Table View**  
+Fraud logs live in Power BI dashboards.  
+![Power BI Table](images/powerbi_mysql.png)
+
+**🖥️ Flask UI - Home**  
+User interface for entering transaction data.  
+![Home](images/1.png)
+
+**🧾 Flask UI - About**  
+Describes the app functionality.  
+![About](images/2.png)
+
+**💹 Transaction Overview**  
+Fraud vs Legit overview.  
+![Overview](images/transaction_overview.png)
+
+**🧍 Demographic Insights**  
+Gender, age-based fraud ratios.  
+![Demographics](images/demographic_insights.png)
+
+**🗺️ Geographic Analysis**  
+Region-wise fraud spread.  
+![Geo](images/geographic_analysis.png)
+
+**🏪 Merchant Category Analysis**  
+Which merchants are more targeted.  
+![Merchant](images/merchant_category.png)
+
+**⏱️ Temporal Analysis**  
+Fraud rate vs time of day/week.  
+![Time](images/temporal_analysis.png)
+
+---
+
+## 📈 Model Performance
 
 | Metric      | Score    |
 |-------------|----------|
@@ -156,28 +192,21 @@ pip install -r requirements.txt
 | Recall      | 0.9969   |
 | F1-Score    | **0.9979** |
 
+> Model: Random Forest with balanced class weights and 200 trees.
+
 ---
 
 ## 📜 License
-
-This project is licensed under the Apache License.
-
----
-
-## 🤝 Contributions
-
-- Contributions, suggestions, and PRs are welcome!
-- Please open issues for bugs or feature requests.
+Apache 2.0 — You’re free to use, modify, and distribute with attribution.
 
 ---
 
 ## 📬 Contact
-
 **Kirtan Soni**  
-- Email: [sonikirtan2004@gmail.com](mailto:sonikirtan2004@gmail.com)  
-- LinkedIn: [linkedin.com/in/kirtansoni02](https://www.linkedin.com/in/kirtansoni02)
+📧 sonikirtan2004@gmail.com  
+🔗 [LinkedIn](https://www.linkedin.com/in/kirtansoni02)
 
 ---
 
-⭐ **If you like this project, please give it a star on GitHub!**
-```
+⭐ If you like this project, please star the repository and share!
+
