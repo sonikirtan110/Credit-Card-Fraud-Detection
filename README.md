@@ -32,7 +32,7 @@ This project includes:
 ├── config.py              # Configuration file containing MySQL credentials
 ├── sql/                   # SQL scripts for setting up the database
 │   ├── create_table.sql   # SQL command to create fraud_logs table
-│   └── sample_data.sql    # Sample insert statements to test the table
+│   └── data.sql    # Sample insert statements to test the table
 ├── models/                # Serialized models after training
 │   ├── best_fraud_detection_model.pkl
 │   └── best_fraud_detection_pipeline1.1.pkl.bz2
@@ -76,18 +76,21 @@ pip install -r requirements.txt
 
 ### 3. Configure MySQL
 Update `config.py` as shown:
-```python
-MYSQL_HOST = 'localhost'
-MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'your_password'
-MYSQL_DB = 'fraud_detection'
+```pythonDB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': '1978',
+    'database': 'fraud',
+    'port': 3310,  # Updated port
+    'auth_plugin': 'mysql_native_password'
+}
 ```
 
 ### 4. Initialize Database
 Run the following commands:
 ```bash
 mysql -u root -p < sql/create_table.sql
-mysql -u root -p < sql/sample_data.sql
+mysql -u root -p < sql/data.sql
 ```
 
 ### 5. Run the Flask App
@@ -104,7 +107,7 @@ Power BI is used **locally** to visualize fraud data from MySQL.
 Steps:
 1. Open Power BI Desktop → "Get Data" → "MySQL"
 2. Enter your MySQL credentials
-3. Select the `fraud_logs` table
+3. Select the `fraud_transactions` table
 4. Build visuals such as:
    - Count of fraud vs non-fraud transactions
    - Demographic-based filtering
@@ -119,15 +122,20 @@ Use **Postman** to send test requests:
 ```json
 POST http://127.0.0.1:5000/predict
 {
-  "amount": 450.50,
-  "time": 12000,
-  "category": "electronics"
+ "amt": 281.06,
+  "city_pop": 885,
+  "lat": 35.9946,
+  "long": -81.7266,
+  "merch_lat": 36.430124,
+  "merch_long": -81.179483,
+  "unix_time": 1325466397,
+  "category":"grocery_pos"
 }
 ```
 
 To confirm data is being logged, run:
 ```sql
-SELECT * FROM fraud_logs;
+SELECT * FROM fraud_transactions;
 ```
 
 You’ll see real-time logs of each prediction made by the model.
