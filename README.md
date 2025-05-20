@@ -100,8 +100,14 @@ python app.py
 Visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
+## Live Preview Links
+
+### PowerBi Live Preview: [Click Here](https://app.fabric.microsoft.com/view?r=eyJrIjoiZjhkMTVmMzUtNDJkOC00OGVlLTkzMDYtYzFiYWM4OWExMzI2IiwidCI6ImRhYTU5MmNhLWRlN2ItNGM1NC04ODM2LTkxYTY2OTBmZTE5NyJ9&pageName=227861ced3fd2f726a2c)
+### Novypro Live Preview: [Click Here](https://www.novypro.com/create_project/credit-card-fraud-detection%F0%9F%92%B3)
+### Ui Live Preview: [Click Here](https://credit-card-fraud-detection-gnkn.onrender.com/)
 
 ## 📊 Dashboards (Local Power BI)
+
 Power BI is used **locally** to visualize fraud data from MySQL.
 
 Steps:
