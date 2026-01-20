@@ -76,7 +76,8 @@ pip install -r requirements.txt
 
 ### 3. Configure MySQL
 Update `config.py` as shown:
-```pythonDB_CONFIG = {
+```pythonDB_CONFIG =
+{
     'host': 'localhost',
     'user': 'root',
     'password': '1978',
